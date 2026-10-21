@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="hi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#173a26">
+  <title>Baat</title>
+  <meta name="description" content="Baat – everyday English phrases with Hindi meanings">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="poppy.svg" type="image/svg+xml">
+  <!-- iPhone/iPad: home-screen icon, name and full-screen mode (iOS ignores manifest icons). -->
+  <link rel="apple-touch-icon" href="poppy-180.png">
+  <meta name="apple-mobile-web-app-title" content="Baat">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <style>
+    :root {
+      --bg: #eef3ee; --fg: #16231b; --muted: #627267;
+      --card: #ffffff; --back: #1f4d33; --back-fg: #ffffff; --accent: #8ec5f2; --say: #2f5fb8;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root { --bg: #0f1a13; --fg: #e8f0ea; --muted: #94a59a; --card: #1b2a20; --back: #1f4d33; --say: #8ec5f2; }
+    }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html, body { margin: 0; height: 100%; }
+    body {
+      background: var(--bg); color: var(--fg);
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans Devanagari", sans-serif;
+      display: flex; flex-direction: column; padding: 16px;
+      padding-top: max(16px, env(safe-area-inset-top));
+      padding-bottom: max(16px, env(safe-area-inset-bottom));
+    }
+    header { display: flex; gap: 8px; align-items: center; }
+    header h1 { flex: 1; margin: 0; font-size: 1.3rem; display: flex; align-items: center; gap: 8px; }
+    header h1 img { width: 32px; height: 32px; border-radius: 8px; }
+    button, select, input {
+      font: inherit; color: inherit; background: var(--card);
+      border: 1px solid color-mix(in srgb, var(--muted) 40%, transparent);
+      border-radius: 10px; padding: 10px 12px;
+    }
+    #topic, #search { width: 100%; margin-top: 8px; }
+    .tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin-top: 8px;
+      border: 1px solid color-mix(in srgb, var(--muted) 40%, transparent); border-radius: 10px; overflow: hidden; }
+    .tabs button { border: 0; border-radius: 0; padding: 8px; }
+    .tabs button[aria-pressed="true"] { background: var(--back); color: var(--back-fg); font-weight: 600; }
+    #status { display: flex; justify-content: space-between; align-items: center;
+      color: var(--muted); font-size: .9rem; margin: 10px 2px 8px; min-height: 1.6em; }
+    .stage { flex: 1; display: flex; perspective: 1200px; min-height: 0; }
+    .card { position: relative; flex: 1; transform-style: preserve-3d;
+      transition: transform .4s ease; cursor: pointer; user-select: none; }
+    .card.flipped { transform: rotateY(180deg); }
+    .face { position: absolute; inset: 0; backface-visibility: hidden; border-radius: 20px;
+      display: flex; align-items: center; justify-content: center; padding: 56px 24px;
+      text-align: center; box-shadow: 0 6px 24px rgb(0 0 0 / .12); }
+    .front { background: var(--card); }
+    .back { background: var(--back); color: var(--back-fg); transform: rotateY(180deg); }
+    .tag { position: absolute; top: 16px; left: 18px; text-align: left;
+      font-size: .85rem; font-weight: 600; line-height: 1.35; opacity: .65; }
+    .word { font-size: clamp(1.5rem, 8vw, 2.6rem); font-weight: 700; overflow-wrap: anywhere; }
+    .say { display: block; font-size: .6em; font-weight: 500; margin-top: .5em; color: var(--say); }
+    .note { display: block; font-size: .5em; font-weight: 500; opacity: .75; margin-top: .8em; }
+    #speak { position: absolute; top: 10px; right: 10px; font-size: 1.3rem; padding: 6px 10px;
+      border: 0; background: transparent; }
+    #speak[hidden] { display: none; }
+    .hint { position: absolute; bottom: 16px; font-size: .8rem; opacity: .6; }
+    .controls { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 16px; }
+    .controls button { padding: 14px 8px; font-size: 1rem; }
+    #learnt { background: var(--accent); color: #16231b; border-color: var(--accent); font-weight: 600; }
+    button:disabled { opacity: .4; }
+    #install { margin-bottom: 10px; padding: 12px; font-weight: 600;
+      background: var(--accent); color: #16231b; border-color: var(--accent); }
+    #install[hidden], [hidden] { display: none !important; }
+    #showLearnt { padding: 4px 12px; font-size: .85rem; }
+    #listView { flex: 1; overflow-y: auto; min-height: 0; }
+    dialog { border: 0; padding: 0; width: 100%; max-width: 560px; height: 100%; max-height: 100%;
+      margin: 0 auto; background: var(--bg); color: var(--fg); }
+    dialog::backdrop { background: rgb(0 0 0 / .4); }
+    .sheet { display: flex; flex-direction: column; height: 100%; padding: 16px;
+      padding-top: max(16px, env(safe-area-inset-top)); padding-bottom: max(16px, env(safe-area-inset-bottom)); }
+    .sheet-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+    .sheet-head h2 { font-size: 1.15rem; margin: 0; }
+    #learntList { flex: 1; overflow-y: auto; margin-top: 8px; }
+    .restoreAll { display: block; margin: 0 0 8px auto; }
+    .row { display: flex; align-items: center; gap: 10px; background: var(--card);
+      border-radius: 12px; padding: 10px 12px; margin-bottom: 6px; }
+    .row div { flex: 1; min-width: 0; }
+    .row b { display: block; overflow-wrap: anywhere; }
+    .row i { display: block; color: var(--say); font-style: normal; font-size: .9rem; }
+    .row span { display: block; color: var(--muted); font-size: .95rem; }
+    .row button, .restoreAll { padding: 4px 10px; font-size: .85rem; flex-shrink: 0; }
+    .row .play { font-size: 1.1rem; border: 0; background: transparent; }
+    .emptyMsg { color: var(--muted); text-align: center; margin-top: 40px; }
+  </style>
+</head>
+<body>
+  <button id="install" hidden>⬇ Baat को ऐप की तरह इंस्टॉल करें</button>
+  <header>
+    <h1><img src="poppy.svg" alt="">Baat</h1>
+    <button id="shuffle" aria-label="Shuffle">🔀</button>
+  </header>
+  <div class="tabs" role="group" aria-label="View">
+    <button id="tabCards">कार्ड · Cards</button>
+    <button id="tabList">सूची · List</button>
+  </div>
+  <select id="topic" aria-label="Topic"></select>
+  <input id="search" type="search" placeholder="खोजें · Search (हिंदी या English)" autocomplete="off" hidden>
+  <div id="status"><span id="progress"></span><button id="showLearnt">✓ याद हुए</button></div>
+
+  <div class="stage" id="cardView">
+    <div class="card" id="card" role="button" aria-label="Flip card">
+      <div class="face front">
+        <div class="tag" id="frontTag"></div>
+        <button id="speak" aria-label="Hear it" hidden>🔊</button>
+        <div class="word" id="front"></div>
+        <div class="hint">पलटने के लिए छुएँ · tap to flip</div>
+      </div>
+      <div class="face back"><div class="tag" id="backTag"></div><div class="word" id="back"></div></div>
+    </div>
+  </div>
+  <div class="controls" id="controls">
+    <button id="prev">← पीछे</button>
+    <button id="next">आगे →</button>
+    <button id="learnt">याद है ✓</button>
+  </div>
+  <div id="listView" hidden></div>
+
+  <dialog id="learntDialog">
+    <div class="sheet">
+      <div class="sheet-head"><h2 id="learntTitle">याद हुए</h2><button id="closeLearnt">बंद करें</button></div>
+      <div id="learntList"></div>
+    </div>
+  </dialog>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+    // localStorage can be unavailable (private mode); the app still works, just without memory.
+    // Keys are prefixed "baat:" because Bol and Sol live on the same site and share this storage.
+    const store = {
+      get(k, d) { try { return JSON.parse(localStorage.getItem("baat:" + k)) ?? d; } catch { return d; } },
+      set(k, v) { try { localStorage.setItem("baat:" + k, JSON.stringify(v)); } catch {} },
+    };
+    const el = (tag, text, cls) => {
+      const e = document.createElement(tag);
+      if (text != null) e.textContent = text;
+      if (cls) e.className = cls;
+      return e;
+    };
+
+    // phrases = [[english, pronunciation in Devanagari, hindi, topic, lang?], ...]; lang is "sv"
+    // for the Swedish phrases, otherwise English. A phrase's learnt id is its English.
+    let phrases = [], deck = [], i = 0;
+    let view = store.get("view", "Cards");
+    const learnt = new Set(store.get("learnt", []));
+    const learntCards = () => phrases.filter(([en]) => learnt.has(en));
+
+    function shuffle(a) {
+      for (let k = a.length - 1; k > 0; k--) {
+        const j = Math.floor(Math.random() * (k + 1));
+        [a[k], a[j]] = [a[j], a[k]];
+      }
+      return a;
+    }
+
+    // The deck can be narrowed to one topic ("" = all topics), listed in file order.
+    const ALL = "";
+    let topic = store.get("topic", ALL);
+    function fillTopics() {
+      const names = [...new Set(phrases.map((c) => c[3]))];
+      if (!names.includes(topic)) topic = ALL;
+      $("topic").replaceChildren(el("option", "सभी विषय · All topics"), ...names.map((t) => el("option", t)));
+      $("topic").options[0].value = ALL;
+      $("topic").value = topic;
+    }
+    $("topic").onchange = () => {
+      topic = $("topic").value;
+      store.set("topic", topic);
+      buildDeck();
+    };
+    const inTopic = (c) => topic === ALL || c[3] === topic;
+
+    // Opening the deck shuffles it once; 🔀 reshuffles on demand.
+    function buildDeck() {
+      deck = shuffle(phrases.filter((c) => !learnt.has(c[0]) && inTopic(c))
+        .map((c) => ({ en: c[0], say: c[1], hi: c[2], tag: c[3], lang: c[4] })));
+      i = 0;
+      show();
+    }
+
+    function show() {
+      ["Cards", "List"].forEach((v) => $("tab" + v).setAttribute("aria-pressed", v === view));
+      const cards = view === "Cards";
+      $("cardView").hidden = $("controls").hidden = $("shuffle").hidden = !cards;
+      $("listView").hidden = $("search").hidden = cards;
+      cards ? render() : renderList();
+    }
+
+    function render() {
+      $("showLearnt").textContent = `✓ याद हुए (${learntCards().length})`;
+      $("card").classList.remove("flipped");
+      ["prev", "next", "learnt"].forEach((b) => ($(b).disabled = !deck.length));
+      $("speak").hidden = !deck.length || !("speechSynthesis" in window);
+      if (!deck.length) {
+        $("front").textContent = phrases.length ? "🎉 सब याद हो गए!" : "Loading…";
+        $("frontTag").textContent = "";
+        $("progress").textContent = "0 बाकी";
+        return;
+      }
+      const c = deck[i];
+      // English big, how to say it (in Devanagari) on a smaller line below.
+      $("front").replaceChildren(c.en, el("span", c.say, "say"));
+      $("frontTag").textContent = c.tag;
+      // Swap the answer only after the card has turned back to the front.
+      setTimeout(() => {
+        $("back").replaceChildren(c.hi, el("span", `${c.en} · ${c.say}`, "note"));
+        $("backTag").textContent = c.tag;
+      }, 200);
+      $("progress").textContent = `${i + 1} / ${deck.length} बाकी`;
+    }
+
+    // List: every phrase of the topic (learnt ones too), narrowed by the search box.
+    function row([en, say, hi, , lang]) {
+      const r = el("div", null, "row"), text = el("div");
+      text.append(el("b", en), el("i", say), el("span", hi));
+      r.append(text);
+      if ("speechSynthesis" in window) {
+        const play = el("button", "🔊", "play");
+        play.setAttribute("aria-label", "Hear it");
+        play.onclick = () => speak(en, lang);
+        r.append(play);
+      }
+      return r;
+    }
+    function renderList() {
+      $("showLearnt").textContent = `✓ याद हुए (${learntCards().length})`;
+      const q = $("search").value.trim().toLowerCase();
+      const hits = phrases.filter((c) => inTopic(c) && (!q || c.slice(0, 3).some((s) => s.toLowerCase().includes(q))));
+      $("progress").textContent = `${hits.length} वाक्य`;
+      $("listView").replaceChildren(...hits.map(row));
+      if (!hits.length) $("listView").append(el("p", "कुछ नहीं मिला।", "emptyMsg"));
+    }
+    $("search").oninput = renderList;
+
+    // 🔊 reads the phrase with the phone's English (Indian if it has one) or Swedish voice.
+    // "..." gaps are read as a pause.
+    function speak(text, lang) {
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text.replace(/\.\.\./g, ","));
+      u.lang = lang === "sv" ? "sv-SE" : "en-IN";
+      const voices = speechSynthesis.getVoices().map((v) => [v, v.lang.replace("_", "-")]);
+      const v = voices.find(([, l]) => l === u.lang) || voices.find(([, l]) => l.startsWith(u.lang.slice(0, 2)));
+      if (v) u.voice = v[0];
+      u.rate = 0.85;
+      speechSynthesis.speak(u);
+    }
+    if ("speechSynthesis" in window) speechSynthesis.getVoices(); // starts loading voices
+
+    $("speak").onclick = (e) => { e.stopPropagation(); deck.length && speak(deck[i].en, deck[i].lang); };
+    $("card").onclick = () => deck.length && $("card").classList.toggle("flipped");
+    $("prev").onclick = () => { i = (i - 1 + deck.length) % deck.length; render(); };
+    $("next").onclick = () => { i = (i + 1) % deck.length; render(); };
+    $("learnt").onclick = () => {
+      learnt.add(deck[i].en);
+      store.set("learnt", [...learnt]);
+      deck.splice(i, 1);
+      if (i >= deck.length) i = 0;
+      render();
+    };
+    $("shuffle").onclick = () => { shuffle(deck); i = 0; render(); };
+    ["Cards", "List"].forEach((v) => ($("tab" + v).onclick = () => {
+      if (v !== view) { view = v; store.set("view", v); show(); }
+    }));
+
+    // Learnt list, in file order.
+    let restored = false; // a phrase was restored while the list was open
+
+    function restore(cards) {
+      cards.forEach(([en]) => learnt.delete(en));
+      store.set("learnt", [...learnt]);
+      restored = true;
+      renderLearnt();
+    }
+
+    function renderLearnt() {
+      const out = $("learntList"), scroll = out.scrollTop, cards = learntCards();
+      out.replaceChildren();
+      $("learntTitle").textContent = `याद हुए (${cards.length})`;
+      if (!cards.length) {
+        out.append(el("p", "अभी कुछ नहीं। कार्ड पर “याद है ✓” दबाएँ, वो यहाँ आ जाएगा।", "emptyMsg"));
+        return;
+      }
+      const all = el("button", "सब वापस लाएँ", "restoreAll");
+      all.onclick = () => confirm(`सभी ${cards.length} वाक्य फिर से अभ्यास में डालें?`) && restore(cards);
+      out.append(all);
+      for (const c of cards) {
+        const r = row(c), undo = el("button", "↩ वापस");
+        undo.onclick = () => restore([c]);
+        r.append(undo);
+        out.append(r);
+      }
+      out.scrollTop = scroll;
+    }
+
+    $("showLearnt").onclick = () => {
+      restored = false;
+      renderLearnt();
+      $("learntList").scrollTop = 0;
+      $("learntDialog").showModal();
+    };
+    $("closeLearnt").onclick = () => $("learntDialog").close();
+    $("learntDialog").onclose = () => (restored ? buildDeck() : show());
+
+    fetch("phrases.json").then((r) => r.json())
+      .then((all) => { phrases = all; fillTopics(); buildDeck(); })
+      .catch(() => { $("front").textContent = "वाक्य लोड नहीं हो पाए।"; });
+
+    // Chrome only fires this when Baat can be installed and isn't installed yet. Its dialog
+    // installs a real app (own icon, no browser bar), unlike "Add to Home screen > Create shortcut".
+    let installPrompt = null;
+    addEventListener("beforeinstallprompt", (e) => {
+      e.preventDefault();
+      installPrompt = e;
+      $("install").hidden = false;
+    });
+    $("install").onclick = () => {
+      $("install").hidden = true;
+      installPrompt?.prompt();
+      installPrompt = null;
+    };
+    addEventListener("appinstalled", () => ($("install").hidden = true));
+
+    // iPhone/iPad have no install prompt, so explain the Share-menu route instead (once dismissed, stays hidden).
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+    const standalone = navigator.standalone || matchMedia("(display-mode: standalone)").matches;
+    if (isIOS && !standalone && !store.get("iosHintDismissed", false)) {
+      $("install").textContent = "इंस्टॉल करने के लिए: Share ⬆︎ दबाएँ, फिर “Add to Home Screen” ✕";
+      $("install").hidden = false;
+      $("install").onclick = () => { $("install").hidden = true; store.set("iosHintDismissed", true); };
+    }
+
+    if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");
+  </script>
+</body>
+</html>

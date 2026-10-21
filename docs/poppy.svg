@@ -1,0 +1,133 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Himalayan blue poppy (Meconopsis) on a flat dark-green background. The background is
+       full-bleed so Android can mask the icon to any shape; the flower stays inside the central
+       safe zone (radius ~205) that every mask keeps. -->
+  <defs>
+    <radialGradient id="front" cx="256" cy="256" r="190" gradientUnits="userSpaceOnUse">
+      <stop offset="0.15" stop-color="#3d5fc4"/>
+      <stop offset="0.55" stop-color="#5f98e6"/>
+      <stop offset="1" stop-color="#9fd0f7"/>
+    </radialGradient>
+    <radialGradient id="rear" cx="256" cy="256" r="190" gradientUnits="userSpaceOnUse">
+      <stop offset="0.15" stop-color="#2f4aa6"/>
+      <stop offset="0.6" stop-color="#4a7fd2"/>
+      <stop offset="1" stop-color="#7fb6ec"/>
+    </radialGradient>
+  </defs>
+  <rect width="512" height="512" fill="#173a26"/>
+
+  <!-- Four broad, crinkled petals: the two behind are a shade darker. Each has a soft wavy rim
+       and faint veins. -->
+  <g id="petal-shape" style="display:none">
+    <path id="p" d="M256 256 C 184 238, 116 158, 148 102 C 166 70, 204 64, 226 78 C 238 60, 274 58, 288 76 C 310 62, 348 72, 362 104 C 394 160, 328 238, 256 256 Z"/>
+  </g>
+  <g stroke="#2a4596" stroke-width="2" stroke-linejoin="round">
+    <use href="#p" fill="url(#rear)" transform="rotate(25 256 256)"/>
+    <use href="#p" fill="url(#rear)" transform="rotate(205 256 256)"/>
+    <use href="#p" fill="url(#front)" transform="rotate(115 256 256)"/>
+    <use href="#p" fill="url(#front)" transform="rotate(295 256 256)"/>
+  </g>
+  <g id="veins" style="display:none" fill="none" stroke="#c9e6fb" stroke-opacity=".35" stroke-width="2.5" stroke-linecap="round">
+    <path id="v" d="M256 240 C 240 200, 214 150, 206 106 M256 240 C 256 190, 256 140, 258 92 M256 240 C 272 200, 298 150, 308 106"/>
+  </g>
+  <g fill="none" stroke="#c9e6fb" stroke-opacity=".35" stroke-width="2.5" stroke-linecap="round">
+    <use href="#v" transform="rotate(25 256 256)"/>
+    <use href="#v" transform="rotate(205 256 256)"/>
+    <use href="#v" transform="rotate(115 256 256)"/>
+    <use href="#v" transform="rotate(295 256 256)"/>
+  </g>
+
+  <!-- Golden stamens around a pale green seed head -->
+  <g stroke="#e9b622" stroke-width="2.5" fill="#f6cf3a">
+    <line x1="282.0" y1="256.0" x2="306.0" y2="256.0"/>
+    <circle cx="306.0" cy="256.0" r="5.5" stroke="none"/>
+    <line x1="236.8" y1="273.6" x2="216.2" y2="292.5"/>
+    <circle cx="216.2" cy="292.5" r="5.5" stroke="none"/>
+    <line x1="258.3" y1="230.1" x2="261.1" y2="198.2"/>
+    <circle cx="261.1" cy="198.2" r="5.5" stroke="none"/>
+    <line x1="271.8" y1="276.6" x2="293.7" y2="305.2"/>
+    <circle cx="293.7" cy="305.2" r="5.5" stroke="none"/>
+    <line x1="230.4" y1="251.5" x2="206.8" y2="247.3"/>
+    <circle cx="206.8" cy="247.3" r="5.5" stroke="none"/>
+    <line x1="277.9" y1="242.0" x2="301.6" y2="227.0"/>
+    <circle cx="301.6" cy="227.0" r="5.5" stroke="none"/>
+    <line x1="249.2" y1="281.1" x2="240.9" y2="312.0"/>
+    <circle cx="240.9" cy="312.0" r="5.5" stroke="none"/>
+    <line x1="244.0" y1="232.9" x2="227.4" y2="201.0"/>
+    <circle cx="227.4" cy="201.0" r="5.5" stroke="none"/>
+    <line x1="280.4" y1="264.9" x2="303.0" y2="273.2"/>
+    <circle cx="303.0" cy="273.2" r="5.5" stroke="none"/>
+    <line x1="232.0" y1="265.9" x2="206.1" y2="276.6"/>
+    <circle cx="206.1" cy="276.6" r="5.5" stroke="none"/>
+    <line x1="267.0" y1="232.5" x2="280.6" y2="203.5"/>
+    <circle cx="280.6" cy="203.5" r="5.5" stroke="none"/>
+    <line x1="263.8" y1="280.8" x2="274.6" y2="315.2"/>
+    <circle cx="274.6" cy="315.2" r="5.5" stroke="none"/>
+    <line x1="233.5" y1="243.0" x2="212.7" y2="230.9"/>
+    <circle cx="212.7" cy="230.9" r="5.5" stroke="none"/>
+    <line x1="281.4" y1="250.4" x2="308.7" y2="244.4"/>
+    <circle cx="308.7" cy="244.4" r="5.5" stroke="none"/>
+    <line x1="241.0" y1="277.3" x2="222.6" y2="303.4"/>
+    <circle cx="222.6" cy="303.4" r="5.5" stroke="none"/>
+    <line x1="252.7" y1="230.2" x2="248.0" y2="194.5"/>
+    <circle cx="248.0" cy="194.5" r="5.5" stroke="none"/>
+    <line x1="275.9" y1="272.8" x2="294.2" y2="288.2"/>
+    <circle cx="294.2" cy="288.2" r="5.5" stroke="none"/>
+    <line x1="230.0" y1="257.1" x2="202.0" y2="258.2"/>
+    <circle cx="202.0" cy="258.2" r="5.5" stroke="none"/>
+    <line x1="274.4" y1="237.7" x2="297.1" y2="215.1"/>
+    <circle cx="297.1" cy="215.1" r="5.5" stroke="none"/>
+    <line x1="254.8" y1="282.0" x2="253.1" y2="317.9"/>
+    <circle cx="253.1" cy="317.9" r="5.5" stroke="none"/>
+    <line x1="239.3" y1="236.0" x2="224.0" y2="217.6"/>
+    <circle cx="224.0" cy="217.6" r="5.5" stroke="none"/>
+    <line x1="281.8" y1="259.5" x2="309.5" y2="263.2"/>
+    <circle cx="309.5" cy="263.2" r="5.5" stroke="none"/>
+    <line x1="234.7" y1="270.8" x2="208.4" y2="289.1"/>
+    <circle cx="208.4" cy="289.1" r="5.5" stroke="none"/>
+    <line x1="261.7" y1="230.6" x2="269.6" y2="195.5"/>
+    <circle cx="269.6" cy="195.5" r="5.5" stroke="none"/>
+    <line x1="268.9" y1="278.6" x2="280.9" y2="299.4"/>
+    <circle cx="280.9" cy="299.4" r="5.5" stroke="none"/>
+    <line x1="231.2" y1="248.1" x2="204.6" y2="239.6"/>
+    <circle cx="204.6" cy="239.6" r="5.5" stroke="none"/>
+    <line x1="279.6" y1="245.1" x2="308.7" y2="231.7"/>
+    <circle cx="308.7" cy="231.7" r="5.5" stroke="none"/>
+    <line x1="246.0" y1="280.0" x2="232.1" y2="313.2"/>
+    <circle cx="232.1" cy="313.2" r="5.5" stroke="none"/>
+    <line x1="247.2" y1="231.5" x2="239.1" y2="208.9"/>
+    <circle cx="239.1" cy="208.9" r="5.5" stroke="none"/>
+    <line x1="279.0" y1="268.1" x2="303.8" y2="281.1"/>
+    <circle cx="303.8" cy="281.1" r="5.5" stroke="none"/>
+    <line x1="230.9" y1="262.6" x2="199.9" y2="270.8"/>
+    <circle cx="199.9" cy="270.8" r="5.5" stroke="none"/>
+    <line x1="270.1" y1="234.1" x2="289.5" y2="203.9"/>
+    <circle cx="289.5" cy="203.9" r="5.5" stroke="none"/>
+    <line x1="260.4" y1="281.6" x2="264.5" y2="305.3"/>
+    <circle cx="264.5" cy="305.3" r="5.5" stroke="none"/>
+    <line x1="235.4" y1="240.1" x2="213.3" y2="222.9"/>
+    <circle cx="213.3" cy="222.9" r="5.5" stroke="none"/>
+    <line x1="281.9" y1="253.9" x2="313.8" y2="251.2"/>
+    <circle cx="313.8" cy="251.2" r="5.5" stroke="none"/>
+    <line x1="238.3" y1="275.1" x2="213.9" y2="301.5"/>
+    <circle cx="213.9" cy="301.5" r="5.5" stroke="none"/>
+    <line x1="256.1" y1="230.0" x2="256.3" y2="206.0"/>
+    <circle cx="256.3" cy="206.0" r="5.5" stroke="none"/>
+    <line x1="273.5" y1="275.3" x2="292.3" y2="296.0"/>
+    <circle cx="292.3" cy="296.0" r="5.5" stroke="none"/>
+    <line x1="230.1" y1="253.6" x2="198.2" y2="250.6"/>
+    <circle cx="198.2" cy="250.6" r="5.5" stroke="none"/>
+    <line x1="276.7" y1="240.3" x2="305.4" y2="218.5"/>
+    <circle cx="305.4" cy="218.5" r="5.5" stroke="none"/>
+    <line x1="251.3" y1="281.6" x2="247.0" y2="305.2"/>
+    <circle cx="247.0" cy="305.2" r="5.5" stroke="none"/>
+    <line x1="242.2" y1="234.0" x2="227.2" y2="210.3"/>
+    <circle cx="227.2" cy="210.3" r="5.5" stroke="none"/>
+    <line x1="281.1" y1="262.9" x2="311.9" y2="271.3"/>
+    <circle cx="311.9" cy="271.3" r="5.5" stroke="none"/>
+    <line x1="232.9" y1="267.9" x2="200.8" y2="284.3"/>
+    <circle cx="200.8" cy="284.3" r="5.5" stroke="none"/>
+  </g>
+  <circle cx="256" cy="256" r="24" fill="#a9bf6a" stroke="#7f9548" stroke-width="2"/>
+  <circle cx="256" cy="256" r="10" fill="#f1ecc4"/>
+</svg>
